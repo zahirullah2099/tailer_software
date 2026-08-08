@@ -2,13 +2,13 @@
 
 namespace App\Repository\Repositories;
 
-class MeasurementRepository
+use App\Models\Measurement;
+use App\Repository\Interfaces\MeasurementInterface;
+
+class MeasurementRepository implements MeasurementInterface
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public function create(array $data): Measurement
     {
-        //
+        return Measurement::create($data);
     }
 }

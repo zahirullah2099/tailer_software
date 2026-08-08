@@ -50,11 +50,11 @@
                 x-show="open && sidebarOpen"
                 x-transition>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('customers.index') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     All Customers
                 </a>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('customers.create') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     Add Customer
                 </a>
 
