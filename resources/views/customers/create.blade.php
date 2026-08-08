@@ -12,9 +12,35 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6" x-data="{ tab: 'customer' }">
+    <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6" x-data="{ tab: 'customer', takeMeasurements: false }">
 
         <div id="alertBox" class="hidden mb-4 px-4 py-3 rounded-lg text-sm"></div>
+
+        <!-- Measurement toggle -->
+        <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-5 py-4 mb-6">
+
+            <div>
+                <p class="font-medium text-gray-800">Take measurements now?</p>
+                <p class="text-sm text-gray-500">Only if the customer is here and ready to be measured.</p>
+            </div>
+
+            <div class="flex gap-2">
+                <button type="button"
+                        @click="takeMeasurements = false; tab = 'customer'; $refs.measurementFields.querySelectorAll('input, select, textarea').forEach(el => el.value = '')"
+                        :class="!takeMeasurements ? 'bg-gray-800 text-white' : 'bg-white text-gray-600 border border-gray-300'"
+                        class="px-4 py-2 rounded-lg font-medium">
+                    No, skip
+                </button>
+
+                <button type="button"
+                        @click="takeMeasurements = true; tab = 'measurement'"
+                        :class="takeMeasurements ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-300'"
+                        class="px-4 py-2 rounded-lg font-medium">
+                    Yes, take measurements
+                </button>
+            </div>
+
+        </div>
 
         <!-- Tabs -->
         <div class="flex border-b border-gray-200 mb-6">
@@ -26,10 +52,11 @@
             </button>
 
             <button type="button"
-                    @click="tab = 'measurement'"
-                    :class="tab === 'measurement' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'"
+                    @click="takeMeasurements && (tab = 'measurement')"
+                    :disabled="!takeMeasurements"
+                    :class="tab === 'measurement' ? 'border-blue-600 text-blue-600' : (takeMeasurements ? 'border-transparent text-gray-500' : 'border-transparent text-gray-300 cursor-not-allowed')"
                     class="px-5 py-3 border-b-2 font-medium">
-                <i class="fa-solid fa-ruler"></i> Measurements (Optional)
+                <i class="fa-solid fa-ruler"></i> Measurements
             </button>
         </div>
 
@@ -77,10 +104,10 @@
             </div>
 
             <!-- Measurement Tab -->
-            <div x-show="tab === 'measurement'" x-cloak>
+            <div x-show="tab === 'measurement'" x-cloak x-ref="measurementFields">
 
                 <p class="text-sm text-gray-500 mb-4">
-                    Leave blank if measurements will be taken later.
+                    Fields left blank won't be saved.
                 </p>
 
                 <h3 class="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Shirt</h3>
