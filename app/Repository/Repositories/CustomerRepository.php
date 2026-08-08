@@ -4,21 +4,13 @@ namespace App\Repository\Repositories;
 
 use App\Models\Customer;
 use App\Repository\Interfaces\CustomerInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class CustomerRepository implements CustomerInterface
 {
-    public function paginateWithSearch(?string $search, int $perPage = 15): LengthAwarePaginator
+    public function all()
     {
-        return Customer::query()
-            ->when($search, function ($query, string $search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('phone', 'like', "%{$search}%");
-                });
-            })
-            ->latest()
-            ->paginate($perPage);
+        return Customer::all();
     }
 
     public function create(array $data): Customer

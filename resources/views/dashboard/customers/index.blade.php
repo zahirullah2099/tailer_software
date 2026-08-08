@@ -4,105 +4,128 @@
 
 @section('content')
 
-    <div class="flex items-center justify-between gap-4 mb-4">
+<div class="space-y-6">
 
-        <h1 class="text-2xl font-bold text-gray-800 whitespace-nowrap">Customers</h1>
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-        <form method="GET" action="{{ route('customers.index') }}" class="flex-1 flex gap-2 max-w-md">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">
+                Customers
+            </h1>
 
-            <input
-                type="text"
-                name="search"
-                value="{{ request('search') }}"
-                placeholder="Search by name or phone..."
-                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-            <button type="submit"
-                    class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg text-sm">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-
-            @if (request('search'))
-                <a href="{{ route('customers.index') }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </a>
-            @endif
-
-        </form>
+            <p class="text-sm text-gray-500 mt-1">
+                View and manage all registered customers.
+            </p>
+        </div>
 
         <a href="{{ route('customers.create') }}"
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 whitespace-nowrap">
+           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow">
+
             <i class="fa-solid fa-user-plus"></i>
-            Add Customer
+
+            <span>Add Customer</span>
+
         </a>
 
     </div>
 
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <!-- Table Card -->
+    <div class="bg-white rounded-xl shadow border border-gray-100 p-2"> 
 
-        <table class="w-full text-left text-sm">
+        <!-- Table -->
+        <div class="overflow-x-auto">
 
-            <thead class="bg-gray-50 border-b border-gray-100">
-                <tr>
-                    <th class="px-4 py-2.5 font-semibold text-gray-600">Code</th>
-                    <th class="px-4 py-2.5 font-semibold text-gray-600">Name</th>
-                    <th class="px-4 py-2.5 font-semibold text-gray-600">Phone</th>
-                    <th class="px-4 py-2.5 font-semibold text-gray-600">Address</th>
-                    <th class="px-4 py-2.5 font-semibold text-gray-600 text-right">Action</th>
-                </tr>
-            </thead>
+            <table id="customersTable" class="min-w-full text-sm">
 
-            <tbody class="divide-y divide-gray-100">
+                <thead class="bg-gray-50">
 
-                @forelse ($customers as $customer)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2.5 text-gray-500">{{ $customer->customer_code }}</td>
-                        <td class="px-4 py-2.5 font-medium text-gray-800">{{ $customer->name }}</td>
-                        <td class="px-4 py-2.5 text-gray-600">{{ $customer->phone }}</td>
-                        <td class="px-4 py-2.5 text-gray-600">{{ $customer->address ?? '-' }}</td>
-                        <td class="px-4 py-2.5">
-                            <div class="flex justify-end gap-2">
+                    <tr class="text-left text-gray-600">
 
-                                <a href="{{ route('customers.show', $customer->id) }}"
-                                   title="View"
-                                   class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100">
-                                    <i class="fa-solid fa-eye text-xs"></i>
-                                </a>
+                        <th class="px-6 py-4 font-semibold">
+                            Customer Code
+                        </th>
 
-                                {{-- Edit route not built yet --}}
-                                <a href="#"
-                                   title="Edit (coming soon)"
-                                   class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100">
-                                    <i class="fa-solid fa-pen text-xs"></i>
-                                </a>
+                        <th class="px-6 py-4 font-semibold">
+                            Name
+                        </th>
 
-                                {{-- Delete route not built yet --}}
-                                <button type="button"
-                                        title="Delete (coming soon)"
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100">
-                                    <i class="fa-solid fa-trash text-xs"></i>
-                                </button>
+                        <th class="px-6 py-4 font-semibold">
+                            Phone
+                        </th>
 
-                            </div>
-                        </td>
+                        <th class="px-6 py-4 font-semibold">
+                            Address
+                        </th>
+
+                        <th class="px-6 py-4 font-semibold text-center">
+                            Actions
+                        </th>
+
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-4 py-10 text-center text-gray-400">
-                            No customers found.
-                        </td>
-                    </tr>
-                @endforelse
 
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
+
+                    @foreach($customers as $customer)
+
+                        <tr class="border-t hover:bg-gray-50">
+
+                            <td class="px-6 py-4 font-medium">
+                                {{ $customer->customer_code }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $customer->name }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $customer->phone }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $customer->address }}
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                <div class="flex justify-center items-center gap-2">
+
+                                    @include('dashboard.customers._actions')
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
-    <div class="mt-6">
-        {{ $customers->withQueryString()->links() }}
-    </div>
+</div>
 
 @endsection
+
+@push('scripts')
+
+<script>
+
+    let table = new DataTable('#customersTable');
+
+    $('#customSearch').on('keyup', function () {
+
+        table.search(this.value).draw();
+
+    });
+
+</script>
+
+@endpush

@@ -3,14 +3,14 @@
 namespace App\Repository\Interfaces;
 
 use App\Models\Customer;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 interface CustomerInterface
 {
     /**
-     * Get paginated customers, optionally filtered by name or phone search.
+     * Get the base query builder for customers (used by DataTables).
      */
-    public function paginateWithSearch(?string $search, int $perPage = 15): LengthAwarePaginator;
+    public function all();
 
     /**
      * Create a new customer.
