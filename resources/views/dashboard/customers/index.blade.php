@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-3">
 
         <h1 class="text-2xl font-bold text-gray-800">Customers</h1>
 

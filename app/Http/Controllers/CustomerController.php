@@ -21,12 +21,12 @@ class CustomerController extends Controller
             search: $request->string('search')->toString() ?: null,
         );
 
-        return view('customers.index', compact('customers'));
+        return view('dashboard.customers.index', compact('customers'));
     }
 
     public function create(): View
     {
-        return view('customers.create');
+        return view('dashboard.customers.create');
     }
 
     public function store(StoreCustomerRequest $request, CreateCustomerWithMeasurementAction $action): JsonResponse
@@ -44,6 +44,6 @@ class CustomerController extends Controller
     {
         $customer = $this->customers->findWithMeasurements($customer);
 
-        return view('customers.show', compact('customer'));
+        return view('dashboard.customers.show', compact('customer'));
     }
 }
