@@ -3,14 +3,14 @@
 namespace App\Repository\Interfaces;
 
 use App\Models\Customer;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 interface CustomerInterface
 {
     /**
-     * Get the base query builder for customers (used by DataTables).
+     * Get all customers.
      */
-    public function all();
+    public function all(): Collection;
 
     /**
      * Create a new customer.
@@ -23,7 +23,27 @@ interface CustomerInterface
     public function findWithMeasurements(int $id): Customer;
 
     /**
+     * Find a plain customer by ID (no relations).
+     */
+    public function find(int $id): Customer;
+
+    /**
+     * Update an existing customer.
+     */
+    public function update(Customer $customer, array $data): Customer;
+
+    /**
+     * Soft delete a customer.
+     */
+    public function delete(Customer $customer): bool;
+
+    /**
      * Check if a phone number is already used by another customer.
      */
     public function phoneExists(string $phone): bool;
+
+    /**
+     * Check if a phone number is used by a customer other than the given one.
+     */
+    public function phoneExistsExcept(string $phone, int $exceptId): bool;
 }

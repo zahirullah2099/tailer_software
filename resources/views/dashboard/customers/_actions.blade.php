@@ -6,15 +6,18 @@
         <i class="fa-solid fa-eye text-xs"></i>
     </a>
 
-    <a href="#"
-       title="Edit (coming soon)"
-       class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100">
+    <button type="button"
+            class="js-edit-customer w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100"
+            data-id="{{ $customer->id }}"
+            title="Edit">
         <i class="fa-solid fa-pen text-xs"></i>
-    </a>
+    </button>
 
     <button type="button"
-            title="Delete (coming soon)"
-            class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100">
+            class="js-delete-customer w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
+            data-id="{{ $customer->id }}"
+            data-name="{{ $customer->name }}"
+            title="Delete">
         <i class="fa-solid fa-trash text-xs"></i>
     </button>
 

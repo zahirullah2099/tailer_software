@@ -4,13 +4,13 @@ namespace App\Repository\Repositories;
 
 use App\Models\Customer;
 use App\Repository\Interfaces\CustomerInterface;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class CustomerRepository implements CustomerInterface
 {
-    public function all()
+    public function all(): Collection
     {
-        return Customer::all();
+        return Customer::latest()->get();
     }
 
     public function create(array $data): Customer
@@ -23,8 +23,32 @@ class CustomerRepository implements CustomerInterface
         return Customer::with('measurements')->findOrFail($id);
     }
 
+    public function find(int $id): Customer
+    {
+        return Customer::findOrFail($id);
+    }
+
+    public function update(Customer $customer, array $data): Customer
+    {
+        $customer->update($data);
+
+        return $customer->fresh();
+    }
+
+    public function delete(Customer $customer): bool
+    {
+        return $customer->delete();
+    }
+
     public function phoneExists(string $phone): bool
     {
         return Customer::where('phone', $phone)->exists();
+    }
+
+    public function phoneExistsExcept(string $phone, int $exceptId): bool
+    {
+        return Customer::where('phone', $phone)
+            ->where('id', '!=', $exceptId)
+            ->exists();
     }
 }
