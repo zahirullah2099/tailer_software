@@ -11,4 +11,16 @@ class MeasurementRepository implements MeasurementInterface
     {
         return Measurement::create($data);
     }
+
+    public function findByCustomer(int $customerId): ?Measurement
+    {
+        return Measurement::where('customer_id', $customerId)->first();
+    }
+
+    public function update(Measurement $measurement, array $data): Measurement
+    {
+        $measurement->update($data);
+
+        return $measurement->fresh();
+    }
 }

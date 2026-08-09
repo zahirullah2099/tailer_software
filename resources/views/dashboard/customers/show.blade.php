@@ -55,9 +55,13 @@
             </div>
 
             <div class="mt-6 flex flex-col gap-2">
-                <button type="button" disabled
-                        class="w-full bg-gray-100 text-gray-400 px-4 py-2.5 rounded-lg cursor-not-allowed">
-                    <i class="fa-solid fa-ruler"></i> Add Measurement (coming soon)
+                <button type="button" id="measurementBtn"
+                        data-customer-id="{{ $customer->id }}"
+                        class="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2.5 rounded-lg">
+                    <i class="fa-solid fa-ruler"></i>
+                    <span id="measurementBtnLabel">
+                        {{ $customer->measurements->isNotEmpty() ? 'Edit Measurement' : 'Add Measurement' }}
+                    </span>
                 </button>
 
                 <button type="button" disabled
@@ -73,46 +77,9 @@
 
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Measurements</h3>
 
-            @forelse ($customer->measurements as $measurement)
-
-                <div class="border border-gray-100 rounded-lg p-4 mb-4 last:mb-0">
-
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm text-gray-400">
-                            Taken on {{ $measurement->created_at->format('d M, Y') }}
-                        </span>
-
-                        @if ($measurement->is_default)
-                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Default</span>
-                        @endif
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div><span class="text-gray-400">Chest:</span> {{ $measurement->chest ?? '-' }}</div>
-                        <div><span class="text-gray-400">Shoulder:</span> {{ $measurement->shoulder ?? '-' }}</div>
-                        <div><span class="text-gray-400">Sleeve:</span> {{ $measurement->sleeve ?? '-' }}</div>
-                        <div><span class="text-gray-400">Neck:</span> {{ $measurement->neck ?? '-' }}</div>
-                        <div><span class="text-gray-400">Shirt Length:</span> {{ $measurement->shirt_length ?? '-' }}</div>
-                        <div><span class="text-gray-400">Waist:</span> {{ $measurement->waist ?? '-' }}</div>
-                        <div><span class="text-gray-400">Hip:</span> {{ $measurement->hip ?? '-' }}</div>
-                        <div><span class="text-gray-400">Shalwar Length:</span> {{ $measurement->shalwar_length ?? '-' }}</div>
-                        <div><span class="text-gray-400">Bottom Width:</span> {{ $measurement->bottom_width ?? '-' }}</div>
-                        <div><span class="text-gray-400">Collar:</span> {{ $measurement->collar?->value ?? '-' }}</div>
-                        <div><span class="text-gray-400">Cuff:</span> {{ $measurement->cuff?->value ?? '-' }}</div>
-                        <div><span class="text-gray-400">Pocket:</span> {{ $measurement->pocket_type?->value ?? '-' }}</div>
-                    </div>
-
-                    @if ($measurement->fitting_notes)
-                        <p class="text-sm text-gray-500 mt-3">
-                            <span class="text-gray-400">Notes:</span> {{ $measurement->fitting_notes }}
-                        </p>
-                    @endif
-
-                </div>
-
-            @empty
-                <p class="text-gray-400 text-sm">No measurements recorded yet.</p>
-            @endforelse
+            <div id="measurementCard">
+                @include('dashboard.customers._measurement-card', ['measurement' => $customer->measurements->first()])
+            </div>
 
             <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Order History</h3>
             <p class="text-gray-400 text-sm">Orders module coming soon.</p>
@@ -121,4 +88,114 @@
 
     </div>
 
+    <!-- Add / Edit Measurement Modal -->
+    <div id="measurementModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800" id="measurementModalTitle">Measurement</h2>
+                <button type="button" id="closeMeasurementModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div id="measurementAlertBox" class="hidden mb-4 px-4 py-3 rounded-lg text-sm"></div>
+
+            <form id="measurementForm"
+                  data-customer-id="{{ $customer->id }}"
+                  data-store-url="{{ route('customers.measurement.store', $customer->id) }}"
+                  data-edit-url="{{ route('customers.measurement.edit', $customer->id) }}">
+                @csrf
+
+                <h3 class="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Shirt</h3>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-6">
+
+                    @foreach (['chest' => 'Chest', 'shoulder' => 'Shoulder', 'sleeve' => 'Sleeve', 'neck' => 'Neck', 'shirt_length' => 'Shirt Length'] as $field => $label)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $label }}</label>
+                            <input type="number" step="0.01" name="{{ $field }}" id="m_{{ $field }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-600 text-sm mt-1 field-error" data-field="{{ $field }}"></p>
+                        </div>
+                    @endforeach
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Collar</label>
+                        <select name="collar" id="m_collar" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- Select --</option>
+                            @foreach (\App\Enums\CollarType::cases() as $case)
+                                <option value="{{ $case->value }}">{{ ucfirst($case->value) }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-red-600 text-sm mt-1 field-error" data-field="collar"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cuff</label>
+                        <select name="cuff" id="m_cuff" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- Select --</option>
+                            @foreach (\App\Enums\CuffType::cases() as $case)
+                                <option value="{{ $case->value }}">{{ ucfirst($case->value) }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-red-600 text-sm mt-1 field-error" data-field="cuff"></p>
+                    </div>
+
+                </div>
+
+                <h3 class="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Shalwar</h3>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-6">
+
+                    @foreach (['waist' => 'Waist', 'hip' => 'Hip', 'shalwar_length' => 'Shalwar Length', 'bottom_width' => 'Bottom Width'] as $field => $label)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $label }}</label>
+                            <input type="number" step="0.01" name="{{ $field }}" id="m_{{ $field }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-red-600 text-sm mt-1 field-error" data-field="{{ $field }}"></p>
+                        </div>
+                    @endforeach
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pocket Type</label>
+                        <select name="pocket_type" id="m_pocket_type" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- Select --</option>
+                            @foreach (\App\Enums\PocketType::cases() as $case)
+                                <option value="{{ $case->value }}">{{ ucfirst($case->value) }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-red-600 text-sm mt-1 field-error" data-field="pocket_type"></p>
+                    </div>
+
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Fitting Notes</label>
+                    <textarea name="fitting_notes" id="m_fitting_notes" rows="3"
+                              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <p class="text-red-600 text-sm mt-1 field-error" data-field="fitting_notes"></p>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button type="button" id="cancelMeasurementBtn"
+                            class="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" id="measurementSubmitBtn"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save Measurement
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/customers/measurement.js') }}"></script>
+@endpush

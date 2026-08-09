@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MeasurementController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/{customer}/edit', 'edit')->name('edit');
         Route::put('/{customer}', 'update')->name('update');
         Route::delete('/{customer}', 'destroy')->name('destroy');
+        Route::get('/{customer}/measurement/edit', [MeasurementController::class, 'edit'])->name('measurement.edit');
+        Route::post('/{customer}/measurement', [MeasurementController::class, 'store'])->name('measurement.store');
         Route::get('/{customer}', 'show')->name('show');
     });
 });
