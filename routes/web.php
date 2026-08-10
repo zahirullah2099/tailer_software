@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MeasurementController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -30,6 +31,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/{customer}/measurement/edit', [MeasurementController::class, 'edit'])->name('measurement.edit');
         Route::post('/{customer}/measurement', [MeasurementController::class, 'store'])->name('measurement.store');
         Route::get('/{customer}', 'show')->name('show');
+    });
+
+    Route::prefix('orders')->name('orders.')->controller(OrderController::class)->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::get('/customers-search', 'searchCustomers')->name('customers-search');
+        Route::post('/', 'store')->name('store');
     });
 });
 

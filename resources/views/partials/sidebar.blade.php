@@ -93,7 +93,7 @@
                 x-show="open && sidebarOpen"
                 x-transition>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('orders.create') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     New Order
                 </a>
 

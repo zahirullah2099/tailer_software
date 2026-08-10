@@ -51,4 +51,15 @@ class CustomerRepository implements CustomerInterface
             ->where('id', '!=', $exceptId)
             ->exists();
     }
+
+    public function search(string $term, int $limit = 10): Collection
+    {
+        return Customer::with('measurements')
+            ->where(function ($query) use ($term) {
+                $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('phone', 'like', "%{$term}%");
+            })
+            ->limit($limit)
+            ->get();
+    }
 }

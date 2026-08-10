@@ -64,10 +64,10 @@
                     </span>
                 </button>
 
-                <button type="button" disabled
-                        class="w-full bg-gray-100 text-gray-400 px-4 py-2.5 rounded-lg cursor-not-allowed">
-                    <i class="fa-solid fa-file-invoice"></i> New Order (coming soon)
-                </button>
+                <a href="{{ route('orders.create', ['customer' => $customer->id]) }}"
+                   class="w-full block text-center bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2.5 rounded-lg">
+                    <i class="fa-solid fa-file-invoice"></i> New Order
+                </a>
             </div>
 
         </div>

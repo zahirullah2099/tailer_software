@@ -46,4 +46,9 @@ interface CustomerInterface
      * Check if a phone number is used by a customer other than the given one.
      */
     public function phoneExistsExcept(string $phone, int $exceptId): bool;
+
+    /**
+     * Search customers by name or phone (used by the New Order customer picker).
+     */
+    public function search(string $term, int $limit = 10): Collection;
 }
