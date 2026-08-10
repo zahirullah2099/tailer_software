@@ -97,7 +97,7 @@
                     New Order
                 </a>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('orders.index') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     All Orders
                 </a>
 

@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Order\CreateOrderAction;
+use App\Actions\Order\DeleteOrderAction;
+use App\Actions\Order\UpdateOrderAction;
+use App\Actions\Order\UpdateOrderStatusAction;
 use App\Http\Requests\Order\StoreOrderRequest;
+use App\Http\Requests\Order\UpdateOrderRequest;
+use App\Http\Requests\Order\UpdateOrderStatusRequest;
+use App\Models\Order;
 use App\Repository\Interfaces\CustomerInterface;
+use App\Repository\Interfaces\OrderInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,7 +20,15 @@ class OrderController extends Controller
 {
     public function __construct(
         private readonly CustomerInterface $customers,
+        private readonly OrderInterface $orders,
     ) {}
+
+    public function index(): View
+    {
+        $orders = $this->orders->all();
+
+        return view('dashboard.orders.index', compact('orders'));
+    }
 
     public function create(Request $request): View
     {
@@ -57,6 +72,45 @@ class OrderController extends Controller
             'success' => true,
             'message' => 'Order created successfully.',
             'redirect_url' => route('customers.show', $order->customer_id),
+        ]);
+    }
+
+    public function edit(Order $order): JsonResponse
+    {
+        return response()->json([
+            'order' => $order,
+        ]);
+    }
+
+    public function update(UpdateOrderRequest $request, Order $order, UpdateOrderAction $action): JsonResponse
+    {
+        $order = $action->execute($order, $request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order updated successfully.',
+            'order' => $order,
+        ]);
+    }
+
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order, UpdateOrderStatusAction $action): JsonResponse
+    {
+        $order = $action->execute($order, $request->enum('status', \App\Enums\OrderStatus::class));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order status updated successfully.',
+            'status' => $order->status->value,
+        ]);
+    }
+
+    public function destroy(Order $order, DeleteOrderAction $action): JsonResponse
+    {
+        $action->execute($order);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order deleted successfully.',
         ]);
     }
 }

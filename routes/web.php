@@ -34,9 +34,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('orders')->name('orders.')->controller(OrderController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::get('/customers-search', 'searchCustomers')->name('customers-search');
         Route::post('/', 'store')->name('store');
+        Route::get('/{order}/edit', 'edit')->name('edit');
+        Route::put('/{order}', 'update')->name('update');
+        Route::put('/{order}/status', 'updateStatus')->name('update-status');
+        Route::delete('/{order}', 'destroy')->name('destroy');
     });
 });
 
