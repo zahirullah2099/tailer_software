@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'All Orders')
+@section('title', 'Completed Orders')
 
 @section('content')
     @include('dashboard.orders._table', [
-        'pageTitle' => 'All Orders',
-        'pageDescription' => 'View and manage every order.',
+        'pageTitle' => 'Completed Orders',
+        'pageDescription' => 'Orders that have been delivered.',
     ])
 @endsection
 

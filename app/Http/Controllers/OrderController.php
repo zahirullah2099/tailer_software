@@ -26,8 +26,33 @@ class OrderController extends Controller
     public function index(): View
     {
         $orders = $this->orders->all();
+        $statuses = collect(\App\Enums\OrderStatus::cases());
 
-        return view('dashboard.orders.index', compact('orders'));
+        return view('dashboard.orders.index', compact('orders', 'statuses'));
+    }
+
+    public function pending(): View
+    {
+        $statuses = collect([
+            \App\Enums\OrderStatus::PENDING,
+            \App\Enums\OrderStatus::CUTTING,
+            \App\Enums\OrderStatus::STITCHING,
+            \App\Enums\OrderStatus::IRONING,
+            \App\Enums\OrderStatus::READY,
+        ]);
+
+        $orders = $this->orders->allByStatuses($statuses->all());
+
+        return view('dashboard.orders.pending', compact('orders', 'statuses'));
+    }
+
+    public function completed(): View
+    {
+        $statuses = collect([\App\Enums\OrderStatus::DELIVERED]);
+
+        $orders = $this->orders->allByStatuses($statuses->all());
+
+        return view('dashboard.orders.completed', compact('orders', 'statuses'));
     }
 
     public function create(Request $request): View

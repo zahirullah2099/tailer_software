@@ -14,6 +14,13 @@ interface OrderInterface
     public function all(): Collection;
 
     /**
+     * Get orders matching any of the given statuses.
+     *
+     * @param  array<OrderStatus>  $statuses
+     */
+    public function allByStatuses(array $statuses): Collection;
+
+    /**
      * Create a new order.
      */
     public function create(array $data): Order;

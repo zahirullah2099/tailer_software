@@ -14,6 +14,14 @@ class OrderRepository implements OrderInterface
         return Order::with('customer')->latest('order_date')->get();
     }
 
+    public function allByStatuses(array $statuses): Collection
+    {
+        return Order::with('customer')
+            ->whereIn('status', $statuses)
+            ->latest('order_date')
+            ->get();
+    }
+
     public function create(array $data): Order
     {
         return Order::create($data);

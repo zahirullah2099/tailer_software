@@ -101,11 +101,11 @@
                     All Orders
                 </a>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('orders.pending') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     Pending Orders
                 </a>
 
-                <a href="#" class="block pl-16 py-2 hover:bg-slate-800">
+                <a href="{{ route('orders.completed') }}" class="block pl-16 py-2 hover:bg-slate-800">
                     Completed Orders
                 </a>
 

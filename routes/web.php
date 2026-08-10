@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('orders')->name('orders.')->controller(OrderController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/pending', 'pending')->name('pending');
+        Route::get('/completed', 'completed')->name('completed');
         Route::get('/create', 'create')->name('create');
         Route::get('/customers-search', 'searchCustomers')->name('customers-search');
         Route::post('/', 'store')->name('store');
