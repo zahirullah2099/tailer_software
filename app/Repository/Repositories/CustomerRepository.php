@@ -20,7 +20,10 @@ class CustomerRepository implements CustomerInterface
 
     public function findWithMeasurements(int $id): Customer
     {
-        return Customer::with('measurements')->findOrFail($id);
+        return Customer::with([
+            'measurements',
+            'orders' => fn ($query) => $query->latest('order_date'),
+        ])->findOrFail($id);
     }
 
     public function find(int $id): Customer

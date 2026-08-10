@@ -82,7 +82,55 @@
             </div>
 
             <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Order History</h3>
-            <p class="text-gray-400 text-sm">Orders module coming soon.</p>
+
+            @forelse ($customer->orders as $order)
+
+                @php
+                    $statusStyles = match ($order->status) {
+                        \App\Enums\OrderStatus::PENDING => 'bg-yellow-100 text-yellow-700',
+                        \App\Enums\OrderStatus::CUTTING,
+                        \App\Enums\OrderStatus::STITCHING,
+                        \App\Enums\OrderStatus::IRONING => 'bg-blue-100 text-blue-700',
+                        \App\Enums\OrderStatus::READY => 'bg-purple-100 text-purple-700',
+                        \App\Enums\OrderStatus::DELIVERED => 'bg-green-100 text-green-700',
+                        \App\Enums\OrderStatus::CANCELLED => 'bg-red-100 text-red-700',
+                    };
+                @endphp
+
+                <div class="border border-gray-100 rounded-lg p-4 mb-3 last:mb-0">
+
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium text-gray-800">{{ $order->order_number }}</span>
+
+                        <span class="text-xs px-2 py-1 rounded-full {{ $statusStyles }}">
+                            {{ ucfirst($order->status->value) }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div><span class="text-gray-400">Dress:</span> {{ ucwords(str_replace('_', ' ', $order->dress_type->value)) }}</div>
+                        <div><span class="text-gray-400">Qty:</span> {{ $order->quantity }}</div>
+                        <div><span class="text-gray-400">Amount:</span> Rs. {{ number_format($order->total_amount, 2) }}</div>
+                        <div><span class="text-gray-400">Order Date:</span> {{ $order->order_date->format('d M, Y') }}</div>
+                    </div>
+
+                    @if ($order->delivery_date)
+                        <div class="text-sm text-gray-500 mt-2">
+                            <span class="text-gray-400">Expected Delivery:</span> {{ $order->delivery_date->format('d M, Y') }}
+                        </div>
+                    @endif
+
+                    @if ($order->notes)
+                        <p class="text-sm text-gray-500 mt-2">
+                            <span class="text-gray-400">Notes:</span> {{ $order->notes }}
+                        </p>
+                    @endif
+
+                </div>
+
+            @empty
+                <p class="text-gray-400 text-sm">No orders yet.</p>
+            @endforelse
 
         </div>
 
