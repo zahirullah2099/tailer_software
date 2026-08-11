@@ -6,6 +6,12 @@ $(document).ready(function () {
 
     const revenueData = $('#revenueChart').data('chart') || [];
 
+    if (revenueData.length === 0) {
+        $('#revenueChart').closest('div.p-6').append(
+            '<p class="text-sm text-gray-400 text-center mt-4">No payments recorded in this date range yet.</p>'
+        );
+    }
+
     new Chart($('#revenueChart')[0], {
         type: 'line',
         data: {
@@ -21,6 +27,7 @@ $(document).ready(function () {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: { y: { beginAtZero: true } },
         },
@@ -41,6 +48,7 @@ $(document).ready(function () {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { position: 'right' } },
         },
     });
@@ -62,6 +70,7 @@ $(document).ready(function () {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
         },

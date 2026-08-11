@@ -51,21 +51,39 @@
     </div>
 
     <!-- Charts -->
+    @php
+        $statusChartData = $statusCounts->map(fn ($row) => [
+            'label' => ucfirst($row->status->value),
+            'total' => $row->total,
+        ]);
+
+        $dressTypeChartData = $dressTypeCounts->map(fn ($row) => [
+            'label' => ucwords(str_replace('_', ' ', $row->dress_type->value)),
+            'total' => $row->total,
+        ]);
+    @endphp
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
             <h3 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Revenue Over Time</h3>
-            <canvas id="revenueChart" data-chart='@json($revenue)' height="220"></canvas>
+            <div style="position: relative; height: 260px;">
+                <canvas id="revenueChart" data-chart='@json($revenue)'></canvas>
+            </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
             <h3 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Orders by Status</h3>
-            <canvas id="statusChart" data-chart='@json($statusCounts->map(fn ($row) => ["label" => ucfirst($row->status->value), "total" => $row->total]))' height="220"></canvas>
+            <div style="position: relative; height: 260px;">
+                <canvas id="statusChart" data-chart='@json($statusChartData)'></canvas>
+            </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 lg:col-span-2">
             <h3 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Orders by Dress Type</h3>
-            <canvas id="dressTypeChart" data-chart='@json($dressTypeCounts->map(fn ($row) => ["label" => ucwords(str_replace("_", " ", $row->dress_type->value)), "total" => $row->total]))' height="180"></canvas>
+            <div style="position: relative; height: 220px;">
+                <canvas id="dressTypeChart" data-chart='@json($dressTypeChartData)'></canvas>
+            </div>
         </div>
 
     </div>
