@@ -7,6 +7,13 @@
     </a>
 
     <button type="button"
+            class="js-add-payment w-8 h-8 flex items-center justify-center rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100"
+            data-id="{{ $order->id }}"
+            title="Add Payment">
+        <i class="fa-solid fa-money-bill-wave text-xs"></i>
+    </button>
+
+    <button type="button"
             class="js-edit-order w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100"
             data-id="{{ $order->id }}"
             title="Edit">

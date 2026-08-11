@@ -187,4 +187,99 @@ $(document).ready(function () {
         $btn.prop('disabled', false).html('<i class="fa-solid fa-trash"></i> Yes, Delete');
     }
 
+    // ===== ADD PAYMENT =====
+
+    const paymentModal = $('#addPaymentModal');
+
+    $(document).on('click', '.js-add-payment', function () {
+        const orderId = $(this).data('id');
+
+        clearPaymentErrors();
+        $('#paymentForm')[0].reset();
+        $('#payment_paid_at').val(new Date().toISOString().slice(0, 10));
+
+        $.ajax({
+            url: '/orders/' + orderId + '/payment-info',
+            type: 'GET',
+            success: function (response) {
+                const order = response.order;
+
+                $('#payment_order_id').val(order.id);
+                $('#payment_order_number').text(order.order_number);
+                $('#payment_customer_name').text(order.customer_name);
+                $('#payment_total_amount').text('Rs. ' + order.total_amount.toFixed(2));
+                $('#payment_already_paid').text('Rs. ' + order.paid.toFixed(2));
+                $('#payment_balance_due').text('Rs. ' + order.balance.toFixed(2));
+                $('#payment_amount').attr('max', order.balance);
+
+                paymentModal.removeClass('hidden');
+            },
+            error: function () {
+                alert('Unable to load order payment info. Please try again.');
+            }
+        });
+    });
+
+    $('#closePaymentModal, #cancelPaymentBtn').on('click', function () {
+        paymentModal.addClass('hidden');
+    });
+
+    $('#paymentForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const $btn = $('#paymentSubmitBtn');
+
+        clearPaymentErrors();
+        $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Saving...');
+
+        $.ajax({
+            url: '/payments',
+            type: 'POST',
+            data: $('#paymentForm').serialize(),
+            success: function (response) {
+                paymentModal.addClass('hidden');
+                resetPaymentButton($btn);
+
+                const row = $('tr[data-order-row="' + response.order_id + '"]');
+                row.find('[data-order-paid="' + response.order_id + '"]').text('Rs. ' + response.paid.toFixed(2));
+
+                const balanceCell = row.find('[data-order-balance="' + response.order_id + '"]');
+                balanceCell.text('Rs. ' + response.balance.toFixed(2));
+                balanceCell.toggleClass('text-red-600 font-medium', response.balance > 0);
+                balanceCell.toggleClass('text-gray-400', response.balance <= 0);
+            },
+            error: function (xhr) {
+                resetPaymentButton($btn);
+
+                if (xhr.status === 422) {
+                    const errors = xhr.responseJSON.errors;
+
+                    $.each(errors, function (field, messages) {
+                        $('#paymentForm .field-error[data-field="' + field + '"]').text(messages[0]);
+                    });
+
+                    showPaymentAlert('Please fix the errors below.');
+                } else {
+                    showPaymentAlert('Something went wrong. Please try again.');
+                }
+            }
+        });
+    });
+
+    function clearPaymentErrors() {
+        $('#paymentForm .field-error').text('');
+        $('#paymentAlertBox').addClass('hidden').removeClass('bg-red-50 text-red-700 border border-red-200').text('');
+    }
+
+    function showPaymentAlert(message) {
+        $('#paymentAlertBox')
+            .removeClass('hidden')
+            .addClass('bg-red-50 text-red-700 border border-red-200')
+            .text(message);
+    }
+
+    function resetPaymentButton($btn) {
+        $btn.prop('disabled', false).html('<i class="fa-solid fa-floppy-disk"></i> Save Payment');
+    }
+
 });

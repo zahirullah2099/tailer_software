@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MeasurementController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -44,6 +45,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/{order}', 'update')->name('update');
         Route::put('/{order}/status', 'updateStatus')->name('update-status');
         Route::delete('/{order}', 'destroy')->name('destroy');
+        Route::get('/{order}/payment-info', [PaymentController::class, 'paymentInfo'])->name('payment-info');
+    });
+
+    Route::prefix('payments')->name('payments.')->controller(PaymentController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::delete('/{payment}', 'destroy')->name('destroy');
     });
 });
 

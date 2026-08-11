@@ -11,12 +11,12 @@ class OrderRepository implements OrderInterface
 {
     public function all(): Collection
     {
-        return Order::with('customer')->latest('order_date')->get();
+        return Order::with(['customer', 'payments'])->latest('order_date')->get();
     }
 
     public function allByStatuses(array $statuses): Collection
     {
-        return Order::with('customer')
+        return Order::with(['customer', 'payments'])
             ->whereIn('status', $statuses)
             ->latest('order_date')
             ->get();
