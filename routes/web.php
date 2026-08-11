@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MeasurementController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -53,6 +54,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::delete('/{payment}', 'destroy')->name('destroy');
     });
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
 
 Route::redirect('/', '/login');

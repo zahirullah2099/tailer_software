@@ -127,7 +127,7 @@
         </a>
 
         <!-- Reports -->
-        <a href="#" class="flex items-center px-6 py-3 hover:bg-slate-800">
+        <a href="{{ route('reports.index') }}" class="flex items-center px-6 py-3 hover:bg-slate-800">
 
             <i class="fa-solid fa-chart-column w-6 text-center"></i>
 
