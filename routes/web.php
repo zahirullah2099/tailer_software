@@ -6,7 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MeasurementController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -56,6 +58,17 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/', 'update')->name('update');
+        Route::put('/password', 'updatePassword')->name('password');
+    });
+
+    Route::prefix('settings')->name('settings.')->controller(SettingController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/', 'update')->name('update');
+    });
 });
 
 Route::redirect('/', '/login');

@@ -140,7 +140,7 @@
         </a>
 
         <!-- Settings -->
-        <a href="#" class="flex items-center px-6 py-3 hover:bg-slate-800">
+        <a href="{{ route('settings.index') }}" class="flex items-center px-6 py-3 hover:bg-slate-800">
 
             <i class="fa-solid fa-gear w-6 text-center"></i>
 
@@ -153,7 +153,7 @@
         </a>
 
         <!-- Profile -->
-        <a href="#" class="flex items-center px-6 py-3 hover:bg-slate-800">
+        <a href="{{ route('profile.index') }}" class="flex items-center px-6 py-3 hover:bg-slate-800">
 
             <i class="fa-solid fa-user w-6 text-center"></i>
 
