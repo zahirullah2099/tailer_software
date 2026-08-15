@@ -51,11 +51,11 @@
 
                         <tr data-payment-row="{{ $payment->id }}" class="border-t hover:bg-gray-50">
 
-                            <td class="px-6 py-4 font-medium">{{ $payment->order->order_number }}</td>
+                            <td class="px-6 py-4 font-medium">{{ $payment->order?->order_number ?? '—' }}</td>
 
                             <td class="px-6 py-4">
-                                <div>{{ $payment->order->customer->name }}</div>
-                                <div class="text-xs text-gray-400">{{ $payment->order->customer->phone }}</div>
+                                <div>{{ $payment->order?->customer?->name ?? '—' }}</div>
+                                <div class="text-xs text-gray-400">{{ $payment->order?->customer?->phone ?? '' }}</div>
                             </td>
 
                             <td class="px-6 py-4 text-green-700 font-medium">Rs. {{ number_format($payment->amount, 2) }}</td>

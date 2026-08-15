@@ -10,7 +10,10 @@ class PaymentRepository implements PaymentInterface
 {
     public function all(): Collection
     {
-        return Payment::with('order.customer')->latest('paid_at')->get();
+        return Payment::with([
+            'order' => fn ($q) => $q->withTrashed(),
+            'order.customer' => fn ($q) => $q->withTrashed(),
+        ])->latest('paid_at')->get();
     }
 
     public function create(array $data): Payment
