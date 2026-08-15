@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Profile\UpdatePasswordAction;
 use App\Actions\Profile\UpdateProfileAction;
+use App\Http\Requests\Profile\UpdateAvatarRequest;
 use App\Http\Requests\Profile\UpdatePasswordRequest;
 use App\Http\Requests\Profile\UpdateProfileRequest;
 use Illuminate\Http\JsonResponse;
@@ -25,6 +26,18 @@ class ProfileController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Profile updated successfully.',
+        ]);
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request, UpdateProfileAction $action): JsonResponse
+    {
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user = $action->updateAvatar(auth()->user(), $path);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Photo updated successfully.',
+            'avatar_url' => $user->avatar_url,
         ]);
     }
 

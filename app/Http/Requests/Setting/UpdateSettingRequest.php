@@ -16,6 +16,7 @@ class UpdateSettingRequest extends FormRequest
             'shop_email' => ['nullable', 'email', 'max:255'],
             'shop_address' => ['nullable', 'string', 'max:1000'],
             'shop_description' => ['nullable', 'string', 'max:1000'],
+            'shop_logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:2048'],
         ];
     }
 }

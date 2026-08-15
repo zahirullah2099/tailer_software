@@ -16,4 +16,16 @@ class UpdateProfileAction
 
         return $user->fresh();
     }
+
+    public function updateAvatar(User $user, string $path): User
+    {
+        // Delete old avatar file if exists
+        if ($user->avatar) {
+            \Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->update(['avatar' => $path]);
+
+        return $user->fresh();
+    }
 }

@@ -62,12 +62,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::put('/', 'update')->name('update');
+        Route::post('/avatar', 'updateAvatar')->name('avatar');
         Route::put('/password', 'updatePassword')->name('password');
     });
 
     Route::prefix('settings')->name('settings.')->controller(SettingController::class)->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::put('/', 'update')->name('update');
+        Route::post('/', 'update')->name('update');
     });
 });
 

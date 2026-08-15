@@ -19,7 +19,16 @@ class User extends Authenticatable
         'password',
         'status',
         'last_login_at',
+        'avatar',
     ];
+
+    /**
+     * Get the URL for the user's avatar, with a fallback.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
 
     public function customers(): HasMany
     {
