@@ -35,7 +35,8 @@
                     <i class="fa-solid fa-camera text-white text-lg"></i>
                 </label>
 
-                <input type="file" id="avatarInput" accept="image/*" class="hidden">
+                <input type="file" id="avatarInput" accept="image/*" class="hidden"
+                       data-url="{{ route('profile.avatar') }}">
             </div>
 
             <div>
@@ -68,24 +69,24 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
                     <input type="text" name="name" value="{{ $user->name }}"
-                           class="w-full border-2 border-blue-300 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-600 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="name"></p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone *</label>
                     <input type="text" name="phone" value="{{ $user->phone }}"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="phone"></p>
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Email (optional)</label>
                     <input type="email" name="email" value="{{ $user->email }}"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="email"></p>
                 </div>
 
@@ -124,24 +125,24 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Current Password *</label>
                     <input type="password" name="current_password"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="current_password"></p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">New Password *</label>
                     <input type="password" name="password"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="password"></p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password *</label>
                     <input type="password" name="password_confirmation"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white
+                                  outline-none transition-colors focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10">
                 </div>
 
             </div>

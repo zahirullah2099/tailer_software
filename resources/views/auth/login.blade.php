@@ -163,7 +163,7 @@
 
 
                         {{-- Login Form --}}
-                        <form action="{{ route('login.store') }}" method="POST">
+                        <form action="{{ route('login.store') }}" method="POST" autocomplete="off">
 
                             @csrf
 
@@ -185,7 +185,7 @@
 
 
                                     <input type="text" name="phone" value="{{ old('phone') }}"
-                                        placeholder="03XXXXXXXXX"
+                                        placeholder="03XXXXXXXXX" autocomplete="off"
                                         class="w-full rounded-xl border border-blue-500 bg-gray-50 pl-11 pr-4 py-3.5 text-sm text-gray-900 outline-none transition focus:bg-white focus:border-blue-800 focus:ring-4 focus:ring-blue-500/10 @error('phone') border-red-500 @enderror">
 
                                 </div>
@@ -221,6 +221,7 @@
 
 
                                     <input type="password" name="password" placeholder="********"
+                                        autocomplete="new-password"
                                         class="w-full rounded-xl border border-blue-500 bg-gray-50 pl-11 pr-4 py-3.5 text-sm text-gray-900 outline-none transition focus:bg-white focus:border-blue-800 focus:ring-4 focus:ring-blue-500/10 @error('password') border-red-500 @enderror">
 
                                 </div>

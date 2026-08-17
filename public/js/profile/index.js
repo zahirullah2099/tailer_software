@@ -13,7 +13,7 @@ $(document).ready(function () {
         $('#avatarMsg').removeClass('hidden text-red-500 text-green-600').addClass('text-gray-400').text('Uploading...');
 
         $.ajax({
-            url: '{{ route("profile.avatar") }}',
+            url: $('#avatarInput').data('url'),
             type: 'POST',
             data: formData,
             processData: false,
