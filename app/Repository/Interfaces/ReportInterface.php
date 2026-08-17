@@ -32,4 +32,11 @@ interface ReportInterface
      * Customers ranked by total order value.
      */
     public function topCustomers(int $limit = 10): Collection;
+
+    /**
+     * Headline stats shown on the dashboard cards.
+     *
+     * @return array{total_customers: int, total_orders: int, pending_orders: int, completed_orders: int, revenue: float, todays_orders: int}
+     */
+    public function dashboardSummary(): array;
 }

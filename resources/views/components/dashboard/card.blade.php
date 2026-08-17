@@ -1,23 +1,23 @@
-<div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+@props(['title', 'value', 'icon', 'color' => 'blue'])
 
-    <div class="flex justify-between items-center">
+<div class="relative overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-{{ $color }}-50 to-white p-6 shadow-sm transition-shadow hover:shadow-md">
+
+    <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-{{ $color }}-100/60"></div>
+
+    <div class="relative flex items-center justify-between">
 
         <div>
-
-            <p class="text-gray-500 text-sm">
+            <p class="text-sm font-medium text-gray-500">
                 {{ $title }}
             </p>
 
-            <h2 class="text-3xl font-bold mt-2">
+            <h2 class="mt-2 text-3xl font-bold text-gray-800">
                 {{ $value }}
             </h2>
-
         </div>
 
-        <div class="w-14 h-14 rounded-full bg-{{ $color }}-100 flex items-center justify-center">
-
-            <i class="fa-solid fa-{{ $icon }} text-{{ $color }}-600 text-2xl"></i>
-
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-{{ $color }}-500 to-{{ $color }}-600 shadow-lg shadow-{{ $color }}-500/30">
+            <i class="fa-solid fa-{{ $icon }} text-xl text-white"></i>
         </div>
 
     </div>

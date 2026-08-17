@@ -22,37 +22,37 @@
 
         <x-dashboard.card
             title="Total Customers"
-            value="250"
+            value="{{ number_format($stats['total_customers']) }}"
             icon="users"
             color="blue" />
 
         <x-dashboard.card
             title="Total Orders"
-            value="145"
+            value="{{ number_format($stats['total_orders']) }}"
             icon="clipboard-list"
             color="green" />
 
         <x-dashboard.card
             title="Pending Orders"
-            value="12"
+            value="{{ number_format($stats['pending_orders']) }}"
             icon="clock"
             color="yellow" />
 
         <x-dashboard.card
             title="Completed Orders"
-            value="133"
+            value="{{ number_format($stats['completed_orders']) }}"
             icon="circle-check"
             color="emerald" />
 
         <x-dashboard.card
             title="Revenue"
-            value="Rs. 250,000"
+            value="Rs. {{ number_format($stats['revenue']) }}"
             icon="sack-dollar"
             color="purple" />
 
         <x-dashboard.card
             title="Today's Orders"
-            value="18"
+            value="{{ number_format($stats['todays_orders']) }}"
             icon="calendar-day"
             color="red" />
 

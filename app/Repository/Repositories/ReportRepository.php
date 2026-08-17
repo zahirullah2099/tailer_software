@@ -2,6 +2,7 @@
 
 namespace App\Repository\Repositories;
 
+use App\Enums\OrderStatus;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Payment;
@@ -65,5 +66,17 @@ class ReportRepository implements ReportInterface
             ->orderByDesc('orders_sum_total_amount')
             ->limit($limit)
             ->get();
+    }
+
+    public function dashboardSummary(): array
+    {
+        return [
+            'total_customers' => Customer::count(),
+            'total_orders' => Order::count(),
+            'pending_orders' => Order::where('status', OrderStatus::PENDING)->count(),
+            'completed_orders' => Order::where('status', OrderStatus::DELIVERED)->count(),
+            'revenue' => (float) Payment::sum('amount'),
+            'todays_orders' => Order::whereDate('order_date', Carbon::today())->count(),
+        ];
     }
 }
