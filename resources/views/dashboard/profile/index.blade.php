@@ -68,8 +68,8 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
                     <input type="text" name="name" value="{{ $user->name }}"
-                           class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                                  focus:outline-none focus:border-blue-500 transition-colors">
+                           class="w-full border-2 border-blue-300 rounded-xl px-4 py-2.5 text-sm
+                                  focus:outline-none focus:border-blue-600 transition-colors">
                     <p class="text-red-500 text-xs mt-1 field-error" data-field="name"></p>
                 </div>
 
