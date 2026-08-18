@@ -114,7 +114,7 @@
                                     {{ $order->order_number }}
                                 </a>
                             </td>
-                            <td class="px-6 py-3">{{ $order->customer->name }}</td>
+                            <td class="px-6 py-3">{{ $order->customer->name ?? 'Deleted Customer' }}</td>
                             <td class="px-6 py-3">Rs. {{ number_format($order->total_amount, 2) }}</td>
                             <td class="px-6 py-3 text-green-700">Rs. {{ number_format($order->payments_sum_amount ?? 0, 2) }}</td>
                             <td class="px-6 py-3 text-red-600 font-medium">Rs. {{ number_format($order->balance, 2) }}</td>

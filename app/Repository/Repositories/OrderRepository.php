@@ -11,12 +11,14 @@ class OrderRepository implements OrderInterface
 {
     public function all(): Collection
     {
-        return Order::with(['customer', 'payments'])->latest('order_date')->get();
+        return Order::with(['customer' => fn ($query) => $query->withTrashed(), 'payments'])
+            ->latest('order_date')
+            ->get();
     }
 
     public function allByStatuses(array $statuses): Collection
     {
-        return Order::with(['customer', 'payments'])
+        return Order::with(['customer' => fn ($query) => $query->withTrashed(), 'payments'])
             ->whereIn('status', $statuses)
             ->latest('order_date')
             ->get();
@@ -29,7 +31,7 @@ class OrderRepository implements OrderInterface
 
     public function find(int $id): Order
     {
-        return Order::with('customer')->findOrFail($id);
+        return Order::with(['customer' => fn ($query) => $query->withTrashed()])->findOrFail($id);
     }
 
     public function update(Order $order, array $data): Order

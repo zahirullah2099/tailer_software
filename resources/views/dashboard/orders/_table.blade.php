@@ -71,8 +71,8 @@
                             <td class="px-6 py-4 font-medium">{{ $order->order_number }}</td>
 
                             <td class="px-6 py-4">
-                                <div>{{ $order->customer->name }}</div>
-                                <div class="text-xs text-gray-400">{{ $order->customer->phone }}</div>
+                                <div>{{ $order->customer->name ?? 'Deleted Customer' }}</div>
+                                <div class="text-xs text-gray-400">{{ $order->customer->phone ?? '—' }}</div>
                             </td>
 
                             <td class="px-6 py-4">{{ ucwords(str_replace('_', ' ', $order->dress_type->value)) }}</td>

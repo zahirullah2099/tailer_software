@@ -45,7 +45,7 @@ class ReportRepository implements ReportInterface
 
     public function outstandingDues(): Collection
     {
-        return Order::with('customer')
+        return Order::with(['customer' => fn ($query) => $query->withTrashed()])
             ->withSum('payments', 'amount')
             ->get()
             ->map(function ($order) {
