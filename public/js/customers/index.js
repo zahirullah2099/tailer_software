@@ -142,8 +142,15 @@ $(document).ready(function () {
                     ? xhr.responseJSON.errors.customer[0]
                     : 'Unable to delete customer. Please try again.';
 
-                alert(message);
+                deleteModal.addClass('hidden');
                 resetDeleteButton($btn);
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cannot Delete Customer',
+                    text: message,
+                    confirmButtonColor: '#2563eb',
+                });
             }
         });
     });

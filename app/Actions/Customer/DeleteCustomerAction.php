@@ -30,10 +30,27 @@ class DeleteCustomerAction
             ]);
         }
 
-        // All remaining orders are delivered/cancelled — safe to remove.
+        if ($this->hasOutstandingDues($customer)) {
+            throw ValidationException::withMessages([
+                'customer' => 'This customer has an unpaid balance on a delivered order and cannot be deleted until it is fully paid.',
+            ]);
+        }
+
+        // All orders are closed and fully paid — safe to remove.
         // Soft-deleted so payment history stays intact for accounting records.
         $customer->orders()->get()->each->delete();
 
         return $this->customers->delete($customer);
+    }
+
+    private function hasOutstandingDues(Customer $customer): bool
+    {
+        $due = $customer->orders()
+            ->where('status', OrderStatus::DELIVERED)
+            ->with('payments')
+            ->get()
+            ->sum(fn ($order) => (float) $order->total_amount - $order->payments->sum('amount'));
+
+        return $due > 0;
     }
 }
