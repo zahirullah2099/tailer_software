@@ -31,8 +31,8 @@ $(document).ready(function () {
 
                 modal.removeClass('hidden');
             },
-            error: function () {
-                alert('Unable to load measurement details. Please try again.');
+            error: function (xhr) {
+                showErrorAlert('Load Failed', extractErrorMessage(xhr, 'Unable to load measurement details. Please try again.'));
             }
         });
     });

@@ -7,8 +7,6 @@ $(document).ready(function () {
     });
 
     const editModal = $('#editCustomerModal');
-    const deleteModal = $('#deleteCustomerModal');
-    let customerIdToDelete = null;
 
     // ===== EDIT =====
 
@@ -32,8 +30,8 @@ $(document).ready(function () {
 
                 editModal.removeClass('hidden');
             },
-            error: function () {
-                alert('Unable to load customer details. Please try again.');
+            error: function (xhr) {
+                showErrorAlert('Load Failed', extractErrorMessage(xhr, 'Unable to load customer details. Please try again.'));
             }
         });
     });
@@ -59,6 +57,7 @@ $(document).ready(function () {
                 editModal.addClass('hidden');
                 updateCustomerRow(response.customer);
                 resetEditButton($btn);
+                showSuccessToast('Customer updated.');
             },
             error: function (xhr) {
                 resetEditButton($btn);
@@ -107,56 +106,25 @@ $(document).ready(function () {
     // ===== DELETE =====
 
     $(document).on('click', '.js-delete-customer', function () {
-        customerIdToDelete = $(this).data('id');
-        $('#deleteCustomerName').text($(this).data('name'));
-        deleteModal.removeClass('hidden');
-    });
+        const customerId = $(this).data('id');
+        const customerName = $(this).data('name');
 
-    $('#cancelDeleteBtn').on('click', function () {
-        customerIdToDelete = null;
-        deleteModal.addClass('hidden');
-    });
-
-    $('#confirmDeleteBtn').on('click', function () {
-        if (!customerIdToDelete) {
-            return;
-        }
-
-        const $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Deleting...');
-
-        $.ajax({
-            url: '/customers/' + customerIdToDelete,
-            type: 'DELETE',
-            success: function () {
-                const row = $('tr[data-customer-row="' + customerIdToDelete + '"]');
+        confirmDelete({
+            url: '/customers/' + customerId,
+            itemLabel: customerName,
+            onSuccess: function () {
+                const row = $('tr[data-customer-row="' + customerId + '"]');
 
                 window.customersTable.row(row.get(0)).remove().draw();
 
-                deleteModal.addClass('hidden');
-                customerIdToDelete = null;
-                resetDeleteButton($btn);
+                showSuccessToast('Customer deleted.');
             },
-            error: function (xhr) {
-                const message = xhr.status === 422 && xhr.responseJSON?.errors?.customer
-                    ? xhr.responseJSON.errors.customer[0]
-                    : 'Unable to delete customer. Please try again.';
+            onError: function (xhr) {
+                const message = extractErrorMessage(xhr, 'Unable to delete customer. Please try again.', 'customer');
 
-                deleteModal.addClass('hidden');
-                resetDeleteButton($btn);
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cannot Delete Customer',
-                    text: message,
-                    confirmButtonColor: '#2563eb',
-                });
+                showErrorAlert('Cannot Delete Customer', message);
             }
         });
     });
-
-    function resetDeleteButton($btn) {
-        $btn.prop('disabled', false).html('<i class="fa-solid fa-trash"></i> Yes, Delete');
-    }
 
 });

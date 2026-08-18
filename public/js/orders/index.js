@@ -48,8 +48,8 @@ $(document).ready(function () {
                 row.attr('data-status', newStatus);
                 $select.prop('disabled', false);
             },
-            error: function () {
-                alert('Unable to update status. Please try again.');
+            error: function (xhr) {
+                showErrorAlert('Update Failed', extractErrorMessage(xhr, 'Unable to update status. Please try again.'));
                 $select.prop('disabled', false);
             }
         });
@@ -80,8 +80,8 @@ $(document).ready(function () {
 
                 editModal.removeClass('hidden');
             },
-            error: function () {
-                alert('Unable to load order details. Please try again.');
+            error: function (xhr) {
+                showErrorAlert('Load Failed', extractErrorMessage(xhr, 'Unable to load order details. Please try again.'));
             }
         });
     });
@@ -144,48 +144,23 @@ $(document).ready(function () {
 
     // ===== DELETE =====
 
-    const deleteModal = $('#deleteOrderModal');
-    let orderIdToDelete = null;
-
     $(document).on('click', '.js-delete-order', function () {
-        orderIdToDelete = $(this).data('id');
-        $('#deleteOrderName').text($(this).data('name'));
-        deleteModal.removeClass('hidden');
-    });
+        const orderId = $(this).data('id');
+        const orderName = $(this).data('name');
 
-    $('#cancelDeleteOrderBtn').on('click', function () {
-        orderIdToDelete = null;
-        deleteModal.addClass('hidden');
-    });
+        confirmDelete({
+            url: '/orders/' + orderId,
+            itemLabel: orderName,
+            onSuccess: function () {
+                table.row($('tr[data-order-row="' + orderId + '"]').get(0)).remove().draw();
 
-    $('#confirmDeleteOrderBtn').on('click', function () {
-        if (!orderIdToDelete) {
-            return;
-        }
-
-        const $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Deleting...');
-
-        $.ajax({
-            url: '/orders/' + orderIdToDelete,
-            type: 'DELETE',
-            success: function () {
-                table.row($('tr[data-order-row="' + orderIdToDelete + '"]').get(0)).remove().draw();
-
-                deleteModal.addClass('hidden');
-                orderIdToDelete = null;
-                resetDeleteOrderButton($btn);
+                showSuccessToast('Order deleted.');
             },
-            error: function () {
-                alert('Unable to delete order. Please try again.');
-                resetDeleteOrderButton($btn);
+            onError: function (xhr) {
+                showErrorAlert('Delete Failed', extractErrorMessage(xhr, 'Unable to delete order. Please try again.'));
             }
         });
     });
-
-    function resetDeleteOrderButton($btn) {
-        $btn.prop('disabled', false).html('<i class="fa-solid fa-trash"></i> Yes, Delete');
-    }
 
     // ===== ADD PAYMENT =====
 
@@ -214,8 +189,8 @@ $(document).ready(function () {
 
                 paymentModal.removeClass('hidden');
             },
-            error: function () {
-                alert('Unable to load order payment info. Please try again.');
+            error: function (xhr) {
+                showErrorAlert('Load Failed', extractErrorMessage(xhr, 'Unable to load order payment info. Please try again.'));
             }
         });
     });

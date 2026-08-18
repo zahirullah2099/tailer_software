@@ -6,47 +6,22 @@ $(document).ready(function () {
         table.search(this.value).draw();
     });
 
-    const deleteModal = $('#deletePaymentModal');
-    let paymentIdToDelete = null;
-
     $(document).on('click', '.js-delete-payment', function () {
-        paymentIdToDelete = $(this).data('id');
-        $('#deletePaymentName').text($(this).data('name'));
-        deleteModal.removeClass('hidden');
-    });
+        const paymentId = $(this).data('id');
+        const paymentName = $(this).data('name');
 
-    $('#cancelDeletePaymentBtn').on('click', function () {
-        paymentIdToDelete = null;
-        deleteModal.addClass('hidden');
-    });
+        confirmDelete({
+            url: '/payments/' + paymentId,
+            itemLabel: paymentName,
+            onSuccess: function () {
+                table.row($('tr[data-payment-row="' + paymentId + '"]').get(0)).remove().draw();
 
-    $('#confirmDeletePaymentBtn').on('click', function () {
-        if (!paymentIdToDelete) {
-            return;
-        }
-
-        const $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Deleting...');
-
-        $.ajax({
-            url: '/payments/' + paymentIdToDelete,
-            type: 'DELETE',
-            success: function () {
-                table.row($('tr[data-payment-row="' + paymentIdToDelete + '"]').get(0)).remove().draw();
-
-                deleteModal.addClass('hidden');
-                paymentIdToDelete = null;
-                resetDeleteButton($btn);
+                showSuccessToast('Payment deleted.');
             },
-            error: function () {
-                alert('Unable to delete payment. Please try again.');
-                resetDeleteButton($btn);
+            onError: function (xhr) {
+                showErrorAlert('Delete Failed', extractErrorMessage(xhr, 'Unable to delete payment. Please try again.'));
             }
         });
     });
-
-    function resetDeleteButton($btn) {
-        $btn.prop('disabled', false).html('<i class="fa-solid fa-trash"></i> Yes, Delete');
-    }
 
 });
