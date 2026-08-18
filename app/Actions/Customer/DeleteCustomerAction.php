@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class DeleteCustomerAction
 {
-    private const array CLOSED_STATUSES = [
+    private const CLOSED_STATUSES = [
         OrderStatus::DELIVERED,
         OrderStatus::CANCELLED,
     ];
