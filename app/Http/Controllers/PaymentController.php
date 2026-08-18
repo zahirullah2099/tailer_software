@@ -30,12 +30,13 @@ class PaymentController extends Controller
     public function paymentInfo(Order $order): JsonResponse
     {
         $paid = $order->payments()->sum('amount');
+        $customer = $order->customer()->withTrashed()->first();
 
         return response()->json([
             'order' => [
                 'id' => $order->id,
                 'order_number' => $order->order_number,
-                'customer_name' => $order->customer->name,
+                'customer_name' => $customer->name ?? 'Deleted Customer',
                 'total_amount' => (float) $order->total_amount,
                 'paid' => (float) $paid,
                 'balance' => (float) $order->total_amount - (float) $paid,

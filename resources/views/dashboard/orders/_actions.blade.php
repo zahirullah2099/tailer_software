@@ -1,10 +1,17 @@
 <div class="flex justify-end gap-2">
 
-    <a href="{{ route('customers.show', $order->customer_id) }}"
-       title="View"
-       class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100">
-        <i class="fa-solid fa-eye text-xs"></i>
-    </a>
+    @if ($order->customer && ! $order->customer->trashed())
+        <a href="{{ route('customers.show', $order->customer_id) }}"
+           title="View"
+           class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100">
+            <i class="fa-solid fa-eye text-xs"></i>
+        </a>
+    @else
+        <span title="Customer was deleted"
+              class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-300 cursor-not-allowed">
+            <i class="fa-solid fa-eye text-xs"></i>
+        </span>
+    @endif
 
     <button type="button"
             class="js-add-payment w-8 h-8 flex items-center justify-center rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100"

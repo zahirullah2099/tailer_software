@@ -137,8 +137,12 @@ $(document).ready(function () {
                 customerIdToDelete = null;
                 resetDeleteButton($btn);
             },
-            error: function () {
-                alert('Unable to delete customer. Please try again.');
+            error: function (xhr) {
+                const message = xhr.status === 422 && xhr.responseJSON?.errors?.customer
+                    ? xhr.responseJSON.errors.customer[0]
+                    : 'Unable to delete customer. Please try again.';
+
+                alert(message);
                 resetDeleteButton($btn);
             }
         });
